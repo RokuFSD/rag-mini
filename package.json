@@ -1,0 +1,21 @@
+{
+	"name": "rag-mini",
+	"version": "1.0.0",
+	"main": "index.ts",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node -r @swc-node/register index.ts",
+		"lint": "npx eslint ."
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"description": "",
+	"devDependencies": {
+		"@eslint/js": "^9.25.1",
+		"@swc-node/register": "^1.10.10",
+		"eslint": "^9.25.1",
+		"typescript": "^5.8.3",
+		"typescript-eslint": "^8.31.0"
+	}
+}
