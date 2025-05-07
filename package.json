@@ -4,7 +4,7 @@
 	"main": "index.ts",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "node -r @swc-node/register index.ts",
+		"start": "node -r @swc-node/register cli.ts",
 		"lint": "npx eslint ."
 	},
 	"keywords": [],
@@ -14,8 +14,13 @@
 	"devDependencies": {
 		"@eslint/js": "^9.25.1",
 		"@swc-node/register": "^1.10.10",
+		"@types/node": "^22.15.2",
 		"eslint": "^9.25.1",
 		"typescript": "^5.8.3",
 		"typescript-eslint": "^8.31.0"
+	},
+	"dependencies": {
+		"@llamaindex/node-parser": "^2.0.2",
+		"@qdrant/js-client-rest": "^1.14.0"
 	}
 }
