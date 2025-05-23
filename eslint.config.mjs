@@ -14,6 +14,10 @@ export default tseslint.config(
     },
     rules: {
       '@stylistic/ts/indent': ['error', 2],
+      '@typescript-eslint/no-unused-vars': ['error', {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_'
+      }],
     }
   }
 );

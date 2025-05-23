@@ -6,8 +6,8 @@ export async function query(question: string, collection = "notion_docs") {
 
   const searchResult = await client.search(collection, {
     vector: questionEmbedding,
-    limit: 10,
-    score_threshold: 0.6,
+    limit: 5,
+    score_threshold: 0.65,
   });
 
   if (searchResult.length === 0) {
@@ -38,8 +38,8 @@ async function chatWithContext(context: string, question: string) {
         {
           role: "system",
           content:
-						'Answer ONLY based on the following context. If unsure, reply "Not found in the documents."\n\nContext:\n' +
-						context,
+            'Answer ONLY based on the following context. If unsure or the question do not make sense for the documents, reply "Not found in the documents."\n\nContext:\n' +
+            context,
         },
         {
           role: "user",

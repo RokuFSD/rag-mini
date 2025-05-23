@@ -1,4 +1,4 @@
-import type { Metadata, BaseNode } from "@llamaindex/core/schema";
+import type { BaseNode, Metadata } from "../lib/llamaindex";
 
 export interface Embedding {
   id: string;
