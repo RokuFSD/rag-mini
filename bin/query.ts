@@ -6,7 +6,7 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
-const collectionName = "notion_docs_bge" as const;
+const collectionName = "notion_docs_bge--token" as const;
 
 async function main() {
   rl.question("Prompt: ", async (text) => {

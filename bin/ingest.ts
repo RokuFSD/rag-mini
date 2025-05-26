@@ -6,7 +6,8 @@ const client = new Client({
   auth: process.env.NOTION_TOKEN,
 });
 
-const collectionName = "notion_docs_bge" as const;
+const collectionName = "notion_docs_bge--token" as const;
+// const collectionName = "notion_docs_bge--md" as const;
 const docsLoader = new NotionDocsLoader(client);
 
 async function main() {

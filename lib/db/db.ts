@@ -24,19 +24,38 @@ export async function storeEmbeddings(
       });
     }
 
-    const points = embeddings.map((embedding) => ({
-      id: embedding.id,
-      vector: embedding.embedding,
-      payload: {
-        text: embedding.text,
-        embedding,
+    const BATCH_SIZE = 50;
+    for (let i = 0; i < embeddings.length; i += BATCH_SIZE) {
+      const batch = embeddings.slice(i, i + BATCH_SIZE).map((embedding) => ({
+        id: embedding.id,
+        vector: embedding.embedding,
         payload: {
-          ...embedding.metadata,
+          text: embedding.text,
+          embedding,
+          payload: {
+            ...embedding.metadata,
+          },
         },
-      },
-    }));
+      }));
 
-    await client.upsert(collectionName, { points });
+      await client.upsert(collectionName, {
+        points: batch,
+      });
+    }
+
+    // const points = embeddings.map((embedding) => ({
+    //   id: embedding.id,
+    //   vector: embedding.embedding,
+    //   payload: {
+    //     text: embedding.text,
+    //     embedding,
+    //     payload: {
+    //       ...embedding.metadata,
+    //     },
+    //   },
+    // }));
+    //
+    // await client.upsert(collectionName, { points });
     console.log("Embeddings stored successfully.");
   } catch (error) {
     console.error("Error storing embeddings:", error);

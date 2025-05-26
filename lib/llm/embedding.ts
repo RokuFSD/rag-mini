@@ -7,6 +7,7 @@ import {
   type TextNode,
 } from "../../lib/llamaindex";
 import { splitMd } from "../../utils/splitters/md-splitter";
+import { getTokenSplitter } from "../../utils/splitters/token-splitter";
 
 const OLLAMA_API = "http://localhost:11434/api/embeddings";
 
@@ -51,9 +52,11 @@ export async function ingestDocuments(
 ) {
   const ids = await loader.getDocsFiles();
   const parser = new MarkdownNodeParser();
+  const splitter = getTokenSplitter(256, 50);
   const nodesList = await Promise.all(
     ids.map(async (id) => {
       const fileContent = await loader.getDocsContent(id);
+      return splitter.getNodesFromDocuments(fileContent);
       return splitMd(parser, fileContent);
     }),
   );

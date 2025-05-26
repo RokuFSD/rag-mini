@@ -6,8 +6,8 @@ export async function query(question: string, collection = "notion_docs") {
 
   const searchResult = await client.search(collection, {
     vector: questionEmbedding,
-    limit: 5,
-    score_threshold: 0.65,
+    limit: 10,
+    score_threshold: 0.6,
   });
 
   if (searchResult.length === 0) {
