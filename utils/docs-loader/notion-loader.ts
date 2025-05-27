@@ -37,4 +37,9 @@ export class NotionDocsLoader implements DocsLoader {
     const docs = await this.reader.loadData(id);
     return docs.map((doc) => doc.text).join("\n");
   }
+
+  // Get reader
+  getReader() {
+    return this.reader;
+  }
 }

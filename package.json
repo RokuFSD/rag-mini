@@ -24,6 +24,8 @@
   "dependencies": {
     "@llamaindex/node-parser": "^2.0.6",
     "@llamaindex/notion": "^0.1.5",
+    "@llamaindex/ollama": "^0.1.7",
+    "@llamaindex/qdrant": "^0.1.17",
     "@notionhq/client": "^2.2.15",
     "@qdrant/js-client-rest": "^1.7.0",
     "llamaindex": "^0.11.0"
