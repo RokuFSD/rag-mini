@@ -1,17 +1,18 @@
-import { Settings } from "llamaindex";
+import { Settings, VectorStoreIndex } from "llamaindex";
 import { NotionDocsLoader } from "../utils/docs-loader/notion-loader";
 import { Client } from "@notionhq/client";
-import { OllamaEmbedding } from "@llamaindex/ollama";
+import { OllamaEmbedding, ollama } from "@llamaindex/ollama";
 
 import { QdrantVectorStore } from "@llamaindex/qdrant";
-import {
-  IngestionPipeline,
-  MarkdownNodeParser,
-  TitleExtractor,
-} from "llamaindex";
+// import {
+//   IngestionPipeline,
+//   MarkdownNodeParser,
+//   TitleExtractor,
+// } from "llamaindex";
 
 // import { getTokenSplitter } from "../utils/splitters/token-splitter";
 import { client } from "../lib/db/client";
+import { storageContextFromDefaults } from "llamaindex/storage";
 
 const notionClient = new Client({
   auth: process.env.NOTION_TOKEN,
@@ -25,22 +26,29 @@ const embedModel = new OllamaEmbedding({
   model: "bge-m3",
 });
 
+Settings.embedModel = embedModel;
+Settings.llm = ollama({
+  model: "deepseek-r1:1.5b",
+  options: {
+    temperature: 0.1,
+  },
+});
+
 const vectorStore = new QdrantVectorStore({
   client,
   collectionName,
   embeddingModel: embedModel,
 });
 
-const pipeline = new IngestionPipeline({
-  reader: docsLoader.getReader(),
-  transformations: [
-    // getTokenSplitter(512, 50),
-    new MarkdownNodeParser(),
-    new TitleExtractor(),
-    embedModel,
-  ],
-  vectorStore,
-});
+// const pipeline = new IngestionPipeline({
+//   transformations: [
+//     // getTokenSplitter(512, 50),
+//     new MarkdownNodeParser(),
+//     new TitleExtractor(),
+//     embedModel,
+//   ],
+//   vectorStore,
+// });
 
 async function main() {
   const docsId = await docsLoader.getDocsFiles();
@@ -48,10 +56,16 @@ async function main() {
     docsId.map((id) => docsLoader.getDocsContent(id)),
   );
   const docs = files.flat();
-
-  await pipeline.run({
-    documents: docs,
+  const storageContext = await storageContextFromDefaults({
+    vectorStore,
   });
+
+  console.log("being stored?");
+  await VectorStoreIndex.fromDocuments(docs, {
+    storageContext,
+  });
+  console.log("finished?");
+
   process.exit(0);
 }
 

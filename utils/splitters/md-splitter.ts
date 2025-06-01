@@ -7,8 +7,8 @@ import type {
 /**
  * Splits Markdown documents into nodes using the provided parser.
  *
- * @param parser - The MarkdownNodeParser instance used to parse the documents.
- * @param documents - An array of Document objects containing metadata to be parsed.
+ * @param parser - An instance of MarkdownNodeParser used to parse the documents.
+ * @param documents - An array of Document objects containing metadata.
  * @returns An array of nodes extracted from the provided documents.
  */
 export function splitMd(

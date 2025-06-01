@@ -21,7 +21,9 @@ export class NotionDocsLoader implements DocsLoader {
     });
 
     // const dbIds = databases.results.map((db) => db.id);
-    const pageIds = pages.results.map((page) => page.id);
+    const pageIds = pages.results.map((page) => page.id).filter((id) => id);
+
+    console.log("pageIds", pageIds);
 
     return [...pageIds];
   }
