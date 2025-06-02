@@ -1,5 +1,5 @@
 import readline from "node:readline";
-import { Settings, VectorStoreIndex } from "llamaindex";
+import { PromptTemplate, Settings, VectorStoreIndex } from "llamaindex";
 import { ollama, OllamaEmbedding } from "@llamaindex/ollama";
 import { QdrantVectorStore } from "@llamaindex/qdrant";
 import { client } from "../lib/db/client";
@@ -34,12 +34,22 @@ async function main() {
     const index = await VectorStoreIndex.fromVectorStore(vectorStore);
     const queryEngine = index.asChatEngine({
       similarityTopK: 3,
+      contextSystemPrompt: new PromptTemplate({
+        templateVars: ["context"],
+        template: `You must answer questions ONLY based on the context information below. If the information is not available in the context, respond with "I don't know" and do not make up information.
+        Context information:
+        ---------------------
+        {context}
+        ---------------------
+
+        Based ONLY on the context above, answer the following question. If the context doesn't contain relevant information, say "I don't know".`,
+      }),
       systemPrompt: `You are a helpful assistant. Answer questions ONLY based on the provided context.
         If the information is not available in the context, respond with "I don't know" and do not make up information.`,
     });
     const response = await queryEngine.chat({ stream: true, message: text });
     for await (const chunk of response) {
-      process.stdout.write(chunk.response);
+      process.stdout.write(chunk.message.content.toString());
     }
     process.exit(0);
   });
